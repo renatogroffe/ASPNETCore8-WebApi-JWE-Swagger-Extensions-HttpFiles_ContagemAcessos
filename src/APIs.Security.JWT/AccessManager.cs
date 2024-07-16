@@ -83,12 +83,6 @@ public class AccessManager
         DateTime dataExpiracao = dataCriacao +
             TimeSpan.FromSeconds(_tokenConfigurations.Seconds);
 
-        // JWE
-        var encryptionkey = Encoding.UTF8.GetBytes("16CharEncryptKeX"); //must be 16 character
-        var encryptingCredentials = new EncryptingCredentials(
-            new SymmetricSecurityKey(encryptionkey),
-            SecurityAlgorithms.Aes128KW, SecurityAlgorithms.Aes128CbcHmacSha256);
-
         var handler = new JwtSecurityTokenHandler();
         var securityToken = handler.CreateToken(new SecurityTokenDescriptor
         {
@@ -96,7 +90,7 @@ public class AccessManager
             Audience = _tokenConfigurations.Audience,
             SigningCredentials = _signingConfigurations.SigningCredentials,
             Subject = claimsIdentity,
-            EncryptingCredentials = encryptingCredentials,
+            EncryptingCredentials = _encryptingCredentials,
             NotBefore = dataCriacao,
             Expires = dataExpiracao
         });
